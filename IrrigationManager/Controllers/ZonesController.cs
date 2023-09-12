@@ -40,8 +40,9 @@ namespace IrrigationManager.Controllers
           {
               return NotFound();
           }
-            var zone = await _context.Zones.FindAsync(id);
-
+            var zone = await _context.Zones.
+                                   Include(x => x.Plant).
+                                   SingleOrDefaultAsync(x => x.PlantId == id);
             if (zone == null)
             {
                 return NotFound();
@@ -49,6 +50,7 @@ namespace IrrigationManager.Controllers
 
             return zone;
         }
+
 
         // PUT: api/Zones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

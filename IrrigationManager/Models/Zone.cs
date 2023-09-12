@@ -8,5 +8,8 @@ namespace IrrigationManager.Models {
         public int RuntimeHours { get; set; } = 0;
         public int RuntimeMinutes { get; set; } = 0;
         public int RuntimePerWeek { get; set; } = 0;
+
+        public int PlantId { get; set; }
+        public virtual Plant? Plant { get; set; }
     }
 }

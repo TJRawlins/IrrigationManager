@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IrrigationManager.Models {
     public class Plant {
@@ -7,10 +8,12 @@ namespace IrrigationManager.Models {
         public string Type { get; set; } = "Tree";
         [StringLength(50)]
         public string Name { get; set;} = string.Empty;
-        public float GalsPerWk { get; set; }
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal GalsPerWk { get; set; }
         public int Quantity { get; set; }
         public int EmittersPerPlant { get; set; } = 1;
-        public float EmitterGPH { get; set; }
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal EmitterGPH { get; set; }
 
         public int ZoneId { get; set; }
         public virtual Zone? Zone {  get; set; }
