@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace IrrigationManager.Models {
     public class Plant {
@@ -16,6 +17,7 @@ namespace IrrigationManager.Models {
         public decimal EmitterGPH { get; set; }
 
         public int ZoneId { get; set; }
+        [JsonIgnore]
         public virtual Zone? Zone {  get; set; }
     }
 }

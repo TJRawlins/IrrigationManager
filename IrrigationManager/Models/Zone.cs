@@ -9,5 +9,6 @@ namespace IrrigationManager.Models {
         public int RuntimeMinutes { get; set; } = 0;
         public int RuntimePerWeek { get; set; } = 0;
 
+        public List<Plant>? Plants { get; set; }
     }
 }
