@@ -16,5 +16,7 @@ namespace IrrigationManager.Models {
         public string Username { get; set; } = string.Empty;
         [StringLength(30)]
         public string Password { get; set; } = string.Empty;
+        public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
+        public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();
     }
 }

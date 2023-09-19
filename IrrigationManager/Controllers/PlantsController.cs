@@ -10,9 +10,7 @@ using IrrigationManager.Models;
 
 namespace IrrigationManager.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PlantsController : ControllerBase
+    public class PlantsController : BaseApiController
     {
         private readonly IMSContext _context;
 
