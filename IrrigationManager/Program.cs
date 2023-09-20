@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using IrrigationManager.Data;
+using IrrigationManager.Interfaces;
+using IrrigationManager.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<IMSContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevDb") ?? throw new InvalidOperationException("Connection string 'DevDb' not found.")));
 
 
 // Add services to the container.
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddCors();
 
