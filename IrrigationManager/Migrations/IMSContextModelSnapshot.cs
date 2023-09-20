@@ -58,7 +58,7 @@ namespace IrrigationManager.Migrations
 
                     b.HasIndex("ZoneId");
 
-                    b.ToTable("Plants");
+                    b.ToTable("Plants", (string)null);
                 });
 
             modelBuilder.Entity("IrrigationManager.Models.User", b =>
@@ -103,7 +103,7 @@ namespace IrrigationManager.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("IrrigationManager.Models.Zone", b =>
@@ -130,7 +130,7 @@ namespace IrrigationManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Zones");
+                    b.ToTable("Zones", (string)null);
                 });
 
             modelBuilder.Entity("IrrigationManager.Models.Plant", b =>

@@ -41,6 +41,23 @@ namespace IrrigationManager.Controllers {
             return user;
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> Login(LoginDto loginDto) {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == loginDto.Username);
+
+            if (user == null) return Unauthorized("Invalid Username");
+
+            // Create the same hash byte array
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
+            // Compare the entered pw byte array with the one in the database byte for byte
+            for(int i = 0; i < computedHash.Length; i++) {
+                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
+            }
+            return user;
+        }
+
         private async Task<bool> UserExists( string username) {
             return await _context.Users.AnyAsync(x => x.Username == username.ToLower());
         }

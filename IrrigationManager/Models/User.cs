@@ -13,7 +13,6 @@ namespace IrrigationManager.Models {
         [StringLength(50)]
         public string Email { get; set; } = string.Empty;
         [StringLength(30)]
-        [Required]
         public string Username { get; set; } = string.Empty;
         [StringLength(30)]
         public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
