@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace IrrigationManager.Models {
     [Index("Username", IsUnique = true)]
@@ -14,8 +15,11 @@ namespace IrrigationManager.Models {
         public string Email { get; set; } = string.Empty;
         [StringLength(30)]
         public string Username { get; set; } = string.Empty;
+
+        [JsonIgnore]
         [StringLength(30)]
         public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
+        [JsonIgnore]
         public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();
     }
 }
