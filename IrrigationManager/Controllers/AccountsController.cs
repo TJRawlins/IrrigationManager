@@ -20,17 +20,17 @@ namespace IrrigationManager.Controllers {
         // string fname, string lname, string email, string username, string password
         public async Task<ActionResult<User>> Register(RegisterDto registerDto) {
 
-            if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
+            if (await UserExists(registerDto.Username!)) return BadRequest("Username is taken");
 
             // Create Salt - "using" allows to dispose class after being used
             using var hmac = new HMACSHA512();
 
             var user = new User {
-                Firstname = registerDto.Firstname,
-                Lastname = registerDto.Lastname,
-                Email = registerDto.Email,
-                Username = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+                Firstname = registerDto.Firstname!,
+                Lastname = registerDto.Lastname!,
+                Email = registerDto.Email!,
+                Username = registerDto.Username!.ToLower(),
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password!)),
                 PasswordSalt = hmac.Key
             };
 
@@ -49,7 +49,7 @@ namespace IrrigationManager.Controllers {
 
             // Create the same hash byte array
             using var hmac = new HMACSHA512(user.PasswordSalt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password!));
 
             // Compare the entered pw byte array with the one in the database byte for byte
             for(int i = 0; i < computedHash.Length; i++) {
