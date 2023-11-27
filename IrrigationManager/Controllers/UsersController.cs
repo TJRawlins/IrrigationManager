@@ -7,9 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IrrigationManager.Data;
 using IrrigationManager.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IrrigationManager.Controllers
 {
+    // Ensure only authorized users have access to endpoint
+    // May add Authorized above any endpoint or at the highest level like this
+    // Use [AllowAnonymous] for any endpoint that you want to allow anyone to access
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IMSContext _context;
@@ -19,6 +24,7 @@ namespace IrrigationManager.Controllers
             _context = context;
         }
 
+        
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
