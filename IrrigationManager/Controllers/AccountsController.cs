@@ -1,6 +1,8 @@
 ﻿using IrrigationManager.Data;
 using IrrigationManager.DTOs;
+using IrrigationManager.Interfaces;
 using IrrigationManager.Models;
+using IrrigationManager.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -9,16 +11,19 @@ using System.Text;
 namespace IrrigationManager.Controllers {
     public class AccountsController : BaseApiController {
 
+        // Include the token service
         private readonly IMSContext _context;
-        public AccountsController(IMSContext context)
+        private readonly ITokenService _tokenService;
+        public AccountsController(IMSContext context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
         // POST: api/accounts/register
         [HttpPost("register")]
         // string fname, string lname, string email, string username, string password
-        public async Task<ActionResult<User>> Register(RegisterDto registerDto) {
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) {
 
             if (await UserExists(registerDto.Username!)) return BadRequest("Username is taken");
 
@@ -38,11 +43,14 @@ namespace IrrigationManager.Controllers {
 
             await _context.SaveChangesAsync();
 
-            return user;
+            return new UserDto {
+                Username = user.Username,
+                Token = _tokenService.CreateToken(user)
+            };
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(LoginDto loginDto) {
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto) {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == loginDto.Username);
 
             if (user == null) return Unauthorized("Invalid Username");
@@ -55,7 +63,10 @@ namespace IrrigationManager.Controllers {
             for(int i = 0; i < computedHash.Length; i++) {
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
             }
-            return user;
+            return new UserDto {
+                Username = user.Username,
+                Token = _tokenService.CreateToken(user)
+            };
         }
 
         private async Task<bool> UserExists( string username) {
