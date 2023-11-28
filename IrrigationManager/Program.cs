@@ -5,33 +5,18 @@ using IrrigationManager.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using IrrigationManager.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<IMSContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevDb") ?? throw new InvalidOperationException("Connection string 'DevDb' not found.")));
-
 
 // Add services to the container.
 
-builder.Services.AddScoped<ITokenService, TokenService>();
-
-builder.Services.AddCors();
+// Cors, Token, Connection String
+// LOCATION: Services > ApplicationServiceExtensions / IdentityServiceExtensions
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
 builder.Services.AddControllers();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
-#pragma warning disable CS8604 // Possible null reference argument.
-        options.TokenValidationParameters = new TokenValidationParameters {
-            // Make sure token is signed by issueer
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.
-                UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-#pragma warning restore CS8604 // Possible null reference argument.
-    });
 
 var app = builder.Build();
 
@@ -39,9 +24,9 @@ var app = builder.Build();
 
 app.UseCors(x => x.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod());
 
-// #1 Middleware - Have valid token?
+// STEP #1 Middleware - Have valid token?
 app.UseAuthentication();
-// #2 Middleware - What is user allowed to do
+// STEP #2 Middleware - What is user allowed to do
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
