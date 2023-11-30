@@ -14,7 +14,7 @@ namespace IrrigationManager.Controllers
     // Ensure only authorized users have access to endpoint
     // May add Authorized above any endpoint or at the highest level like this
     // Use [AllowAnonymous] for any endpoint that you want to allow anyone to access
-    [Authorize]
+    //[Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IMSContext _context;
