@@ -15,6 +15,8 @@ namespace IrrigationManager.Models {
         public string Email { get; set; } = string.Empty;
         [StringLength(30)]
         public string Username { get; set; } = string.Empty;
+        [StringLength(200)]
+        public string ImagePath { get; set; } = "";
 
         [JsonIgnore]
         [StringLength(30)]

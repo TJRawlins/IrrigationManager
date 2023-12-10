@@ -15,9 +15,9 @@ namespace IrrigationManager.Models {
         public int EmittersPerPlant { get; set; } = 1;
         [Column(TypeName = "decimal(5,2)")]
         public decimal EmitterGPH { get; set; }
-
         public int ZoneId { get; set; }
+
         [JsonIgnore]
-        public virtual Zone? Zone {  get; set; }
+        public virtual Zone? Zones {  get; set; }
     }
 }

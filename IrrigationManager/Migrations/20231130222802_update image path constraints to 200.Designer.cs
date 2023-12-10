@@ -3,6 +3,7 @@ using IrrigationManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IrrigationManager.Migrations
 {
     [DbContext(typeof(IMSContext))]
-    partial class IMSContextModelSnapshot : ModelSnapshot
+    [Migration("20231130222802_update image path constraints to 200")]
+    partial class updateimagepathconstraintsto200
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,12 +122,6 @@ namespace IrrigationManager.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EndHours")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EndMinutes")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -141,9 +138,6 @@ namespace IrrigationManager.Migrations
                     b.Property<int>("RuntimeMinutes")
                         .HasColumnType("int");
 
-                    b.Property<int>("RuntimePerMonth")
-                        .HasColumnType("int");
-
                     b.Property<int>("RuntimePerWeek")
                         .HasColumnType("int");
 
@@ -151,16 +145,6 @@ namespace IrrigationManager.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
-
-                    b.Property<int>("StarHours")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StarMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TimeStamp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
