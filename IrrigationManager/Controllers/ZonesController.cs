@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IrrigationManager.Data;
 using IrrigationManager.Models;
+using System.Security.Policy;
 
 namespace IrrigationManager.Controllers
 {
@@ -21,7 +22,7 @@ namespace IrrigationManager.Controllers
 
         // GET: api/Zones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Zone>>> GetZones()
+        public async Task<ActionResult<IEnumerable<Models.Zone>>> GetZones()
         {
           if (_context.Zones == null)
           {
@@ -32,7 +33,7 @@ namespace IrrigationManager.Controllers
 
         // GET: api/Zones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Zone>> GetZone(int id)
+        public async Task<ActionResult<Models.Zone>> GetZone(int id)
         {
           if (_context.Zones == null)
           {
@@ -54,7 +55,7 @@ namespace IrrigationManager.Controllers
         // PUT: api/Zones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutZone(int id, Zone zone)
+        public async Task<IActionResult> PutZone(int id, Models.Zone zone)
         {
             if (id != zone.Id)
             {
@@ -85,7 +86,7 @@ namespace IrrigationManager.Controllers
         // POST: api/Zones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Zone>> PostZone(Zone zone)
+        public async Task<ActionResult<Models.Zone>> PostZone(Models.Zone zone)
         {
           if (_context.Zones == null)
           {
@@ -121,5 +122,8 @@ namespace IrrigationManager.Controllers
         {
             return (_context.Zones?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL GALLONS *-*-*-*-*-*-*-*-*- */
+
     }
 }

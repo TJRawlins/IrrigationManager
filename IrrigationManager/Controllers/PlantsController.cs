@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IrrigationManager.Data;
 using IrrigationManager.Models;
+using System.Security.Policy;
 
 namespace IrrigationManager.Controllers
 {
@@ -64,6 +65,7 @@ namespace IrrigationManager.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                await RecalculateZoneGallons(plant.ZoneId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -91,6 +93,7 @@ namespace IrrigationManager.Controllers
           }
             _context.Plants.Add(plant);
             await _context.SaveChangesAsync();
+            await RecalculateZoneGallons(plant.ZoneId);
 
             return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
         }
@@ -108,9 +111,11 @@ namespace IrrigationManager.Controllers
             {
                 return NotFound();
             }
-
+            // Saving the ZoneId before SaveChagesAsync in case no plants are left after deletion
+            var zoneId = plant.ZoneId;
             _context.Plants.Remove(plant);
             await _context.SaveChangesAsync();
+            await RecalculateZoneGallons(zoneId);
 
             return NoContent();
         }
@@ -118,6 +123,37 @@ namespace IrrigationManager.Controllers
         private bool PlantExists(int id)
         {
             return (_context.Plants?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL GALLONS *-*-*-*-*-*-*-*-*- */
+        private async Task RecalculateZoneGallons(int zoneId) {
+            var totalWeek = (from z in _context.Zones
+                             join p in _context.Plants
+                             on z.Id equals p.ZoneId
+                             where z.Id == zoneId
+                             select new {
+                                 ZoneTotal = p.GalsPerWk * p.Quantity
+                             }).Sum(x => x.ZoneTotal);
+            var totalMonth = (from z in _context.Zones
+                              join p in _context.Plants
+                              on z.Id equals p.ZoneId
+                              where z.Id == zoneId
+                              select new {
+                                  ZoneTotal = (p.GalsPerWk * p.Quantity) * 4
+                              }).Sum(x => x.ZoneTotal);
+            var totalYear = (from z in _context.Zones
+                             join p in _context.Plants
+                             on z.Id equals p.ZoneId
+                             where z.Id == zoneId
+                             select new {
+                                 ZoneTotal = (p.GalsPerWk * p.Quantity) * 52
+                             }).Sum(x => x.ZoneTotal);
+
+            var zone = await _context.Zones.FindAsync(zoneId);
+            zone!.TotalGalPerWeek = totalWeek;
+            zone!.TotalGalPerMonth = totalMonth;
+            zone!.TotalGalPerYear = totalYear;
+            await _context.SaveChangesAsync();
         }
     }
 }

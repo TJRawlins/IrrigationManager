@@ -3,6 +3,7 @@ using IrrigationManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IrrigationManager.Migrations
 {
     [DbContext(typeof(IMSContext))]
-    partial class IMSContextModelSnapshot : ModelSnapshot
+    [Migration("20231212043114_update zone model to add total gals")]
+    partial class updatezonemodeltoaddtotalgals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,13 +165,7 @@ namespace IrrigationManager.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalGalPerMonth")
-                        .HasColumnType("decimal(11,2)");
-
-                    b.Property<decimal>("TotalGalPerWeek")
-                        .HasColumnType("decimal(11,2)");
-
-                    b.Property<decimal>("TotalGalPerYear")
+                    b.Property<decimal>("TotalGallons")
                         .HasColumnType("decimal(11,2)");
 
                     b.HasKey("Id");

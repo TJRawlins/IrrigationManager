@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IrrigationManager.Models {
     public class Zone {
@@ -18,6 +19,12 @@ namespace IrrigationManager.Models {
         public int EndHours { get; set; } = 12;
         public int EndMinutes { get; set; } = 00;
         public string TimeStamp { get; set; } = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+        [Column(TypeName = "decimal(11,2)")]
+        public decimal TotalGalPerWeek { get; set; } = 0;
+        [Column(TypeName = "decimal(11,2)")]
+        public decimal TotalGalPerMonth { get; set; } = 0;
+        [Column(TypeName = "decimal(11,2)")]
+        public decimal TotalGalPerYear { get; set; } = 0;
 
         public virtual List<Plant>? Plants { get; set; }
     }
