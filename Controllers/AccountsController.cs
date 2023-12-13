@@ -25,7 +25,7 @@ namespace IrrigationManager.Controllers {
         // string fname, string lname, string email, string username, string password
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) {
 
-            if (await UserExists(registerDto.Username!)) return BadRequest("Username is taken");
+            if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
             // Create Salt - "using" allows to dispose class after being used
             using var hmac = new HMACSHA512();
