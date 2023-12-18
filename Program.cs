@@ -23,19 +23,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseCors(x => x.WithOrigins("https://localhost:3000").AllowCredentials().AllowAnyHeader().AllowAnyMethod());
-/*
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy",
-        builder => builder
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .SetIsOriginAllowed((host) => true)
-            .AllowAnyHeader());
-});
-
-app.UseCors("CorsPolicy");
-*/
 
 // STEP #1 Middleware - Have valid token?
 app.UseAuthentication();

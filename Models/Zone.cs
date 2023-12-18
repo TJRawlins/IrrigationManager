@@ -25,6 +25,7 @@ namespace IrrigationManager.Models {
         public decimal TotalGalPerMonth { get; set; } = 0;
         [Column(TypeName = "decimal(11,2)")]
         public decimal TotalGalPerYear { get; set; } = 0;
+        public int TotalPlants { get; set; } = 0;
 
         public virtual List<Plant>? Plants { get; set; }
     }

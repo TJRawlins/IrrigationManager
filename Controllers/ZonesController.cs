@@ -123,7 +123,5 @@ namespace IrrigationManager.Controllers
             return (_context.Zones?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL GALLONS *-*-*-*-*-*-*-*-*- */
-
     }
 }

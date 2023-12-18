@@ -66,6 +66,7 @@ namespace IrrigationManager.Controllers
             {
                 await _context.SaveChangesAsync();
                 await RecalculateZoneGallons(plant.ZoneId);
+                await RecalculateTotalPlants(plant.ZoneId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -94,6 +95,7 @@ namespace IrrigationManager.Controllers
             _context.Plants.Add(plant);
             await _context.SaveChangesAsync();
             await RecalculateZoneGallons(plant.ZoneId);
+            await RecalculateTotalPlants(plant.ZoneId);
 
             return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
         }
@@ -116,6 +118,7 @@ namespace IrrigationManager.Controllers
             _context.Plants.Remove(plant);
             await _context.SaveChangesAsync();
             await RecalculateZoneGallons(zoneId);
+            await RecalculateTotalPlants(zoneId);
 
             return NoContent();
         }
@@ -153,6 +156,21 @@ namespace IrrigationManager.Controllers
             zone!.TotalGalPerWeek = totalWeek;
             zone!.TotalGalPerMonth = totalMonth;
             zone!.TotalGalPerYear = totalYear;
+            await _context.SaveChangesAsync();
+        }
+
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL PLANTS *-*-*-*-*-*-*-*-*- */
+        private async Task RecalculateTotalPlants(int zoneId) {
+            var totalPlants = (from z in _context.Zones
+                               join p in _context.Plants
+                               on z.Id equals p.ZoneId
+                               where z.Id == zoneId
+                               select new {
+                                   p.Id
+                               }).Count();
+
+            var zone = await _context.Zones.FindAsync(zoneId);
+            zone!.TotalPlants = totalPlants;
             await _context.SaveChangesAsync();
         }
     }
