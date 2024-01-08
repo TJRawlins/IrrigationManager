@@ -19,7 +19,6 @@ namespace IrrigationManager.Models {
         public string ImagePath { get; set; } = "";
 
         [JsonIgnore]
-        [StringLength(30)]
         public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
         [JsonIgnore]
         public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();

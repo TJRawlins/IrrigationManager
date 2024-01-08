@@ -160,14 +160,16 @@ namespace IrrigationManager.Controllers
         }
 
         /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL PLANTS *-*-*-*-*-*-*-*-*- */
-        private async Task RecalculateTotalPlants(int zoneId) {
+        private async Task RecalculateTotalPlants(int zoneId)
+        {
             var totalPlants = (from z in _context.Zones
                                join p in _context.Plants
                                on z.Id equals p.ZoneId
                                where z.Id == zoneId
-                               select new {
-                                   p.Id
-                               }).Count();
+                               select new
+                               {
+                                   plantTotal = p.Quantity
+                               }).Sum(x => x.plantTotal);
 
             var zone = await _context.Zones.FindAsync(zoneId);
             zone!.TotalPlants = totalPlants;
