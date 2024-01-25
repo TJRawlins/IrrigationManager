@@ -9,7 +9,7 @@ namespace IrrigationManager.Models {
         [StringLength(80)]
         public string Season { get; set; } = "Summer";
         [StringLength(200)]
-        public string ImagePath { get; set; } = "";
+        public string ImagePath { get; set; } = "https://www.greenturf.com/wp-content/uploads/2016/05/sprinkler-system.jpg";
         public int RuntimeHours { get; set; } = 0;
         public int RuntimeMinutes { get; set; } = 0;
         public int RuntimePerWeek { get; set; } = 0;
