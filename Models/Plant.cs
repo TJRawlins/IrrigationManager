@@ -15,6 +15,7 @@ namespace IrrigationManager.Models {
         public int EmittersPerPlant { get; set; } = 1;
         [Column(TypeName = "decimal(5,2)")]
         public decimal EmitterGPH { get; set; }
+        public string TimeStamp { get; set; } = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
         public int ZoneId { get; set; }
 
         [JsonIgnore]
