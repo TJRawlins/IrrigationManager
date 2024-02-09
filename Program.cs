@@ -13,8 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Cors, Token, Connection String
 // LOCATION: Services > ApplicationServiceExtensions / IdentityServiceExtensions
-builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddIdentityServices(builder.Configuration);
+//builder.Services.AddApplicationServices(builder.Configuration);
+//builder.Services.AddIdentityServices(builder.Configuration);
+ApplicationServiceExtensions.AddApplicationServices(builder.Services, builder.Configuration);
+IdentityServiceExtensions.AddIdentityServices(builder.Services, builder.Configuration);
 
 builder.Services.AddControllers();
 
