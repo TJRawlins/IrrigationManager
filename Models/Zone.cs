@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace IrrigationManager.Models {
     public class Zone {
@@ -26,7 +27,11 @@ namespace IrrigationManager.Models {
         [Column(TypeName = "decimal(11,2)")]
         public decimal TotalGalPerYear { get; set; } = 0;
         public int TotalPlants { get; set; } = 0;
+        public int SeasonId { get; set; }
 
         public virtual List<Plant>? Plants { get; set; }
+
+        [JsonIgnore]
+        public virtual Season? Seasons { get; set; }
     }
 }

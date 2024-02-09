@@ -13,6 +13,7 @@ namespace IrrigationManager.Data
         public DbSet<Zone> Zones { get; set; } = default!;
 
         public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Season> Season { get; set; } = default!;
 
         public IMSContext(DbContextOptions<IMSContext> options) : base(options) { }
         public IMSContext() {}
