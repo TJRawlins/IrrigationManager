@@ -32,11 +32,7 @@ namespace IrrigationManager.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Season>> GetSeason(int id)
         {
-            if (_context.Zones == null)
-            {
-                return NotFound();
-            }
-            var season = await _context.Season.Include(x => x.Zones).SingleOrDefaultAsync(x => x.Id == id);
+            var season = await _context.Season.FindAsync(id);
 
             if (season == null)
             {
