@@ -127,7 +127,7 @@ namespace IrrigationManager.Controllers
             return (_context.Zones?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL GALLONS *-*-*-*-*-*-*-*-*- */
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL SEASON GALLONS *-*-*-*-*-*-*-*-*- */
         public async Task RecalculateSeasonGallons(int seasonId)
         {
             var totalWeek = _context.Zones
