@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using IrrigationManager.Data;
 using IrrigationManager.Models;
 using System.Security.Policy;
+using IrrigationManager.Controllers;
 
 namespace IrrigationManager.Controllers
 {
@@ -59,7 +60,8 @@ namespace IrrigationManager.Controllers
             {
                 return BadRequest();
             }
-
+            var zone = await _context.Zones.FindAsync(plant.ZoneId);
+            var seasonId = zone!.SeasonId;
             _context.Entry(plant).State = EntityState.Modified;
 
             try
@@ -67,6 +69,7 @@ namespace IrrigationManager.Controllers
                 await _context.SaveChangesAsync();
                 await RecalculateZoneGallons(plant.ZoneId);
                 await RecalculateTotalPlants(plant.ZoneId);
+                await RecalculateSeasonGallons(seasonId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -92,10 +95,13 @@ namespace IrrigationManager.Controllers
           {
               return Problem("Entity set 'IMSContext.Plant'  is null.");
           }
+            var zone = await _context.Zones.FindAsync(plant.ZoneId);
+            var seasonId = zone!.SeasonId;
             _context.Plants.Add(plant);
             await _context.SaveChangesAsync();
             await RecalculateZoneGallons(plant.ZoneId);
             await RecalculateTotalPlants(plant.ZoneId);
+            await RecalculateSeasonGallons(seasonId);
 
             return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
         }
@@ -115,10 +121,13 @@ namespace IrrigationManager.Controllers
             }
             // Saving the ZoneId before SaveChagesAsync in case no plants are left after deletion
             var zoneId = plant.ZoneId;
+            var zone = await _context.Zones.FindAsync(plant.ZoneId);
+            var seasonId = zone!.SeasonId;
             _context.Plants.Remove(plant);
             await _context.SaveChangesAsync();
             await RecalculateZoneGallons(zoneId);
             await RecalculateTotalPlants(zoneId);
+            await RecalculateSeasonGallons(seasonId);
 
             return NoContent();
         }
@@ -128,7 +137,7 @@ namespace IrrigationManager.Controllers
             return (_context.Plants?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL GALLONS *-*-*-*-*-*-*-*-*- */
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL ZONE GALLONS *-*-*-*-*-*-*-*-*- */
         private async Task RecalculateZoneGallons(int zoneId) {
             var totalWeek = (from z in _context.Zones
                              join p in _context.Plants
@@ -156,6 +165,26 @@ namespace IrrigationManager.Controllers
             zone!.TotalGalPerWeek = totalWeek;
             zone!.TotalGalPerMonth = totalMonth;
             zone!.TotalGalPerYear = totalYear;
+            await _context.SaveChangesAsync();
+        }
+
+        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL SEASON GALLONS *-*-*-*-*-*-*-*-*- */
+        public async Task RecalculateSeasonGallons(int seasonId)
+        {
+            var totalWeek = _context.Zones
+                .Where(zone => zone.SeasonId == seasonId)
+                .Sum(zone => zone.TotalGalPerWeek);
+            var totalMonth = _context.Zones
+                .Where(zone => zone.SeasonId == seasonId)
+                .Sum(zone => zone.TotalGalPerMonth);
+            var totalYear = _context.Zones
+                .Where(zone => zone.SeasonId == seasonId)
+                .Sum(zone => zone.TotalGalPerYear);
+
+            var season = await _context.Season.FindAsync(seasonId);
+            season!.TotalGalPerWeek = totalWeek;
+            season!.TotalGalPerMonth = totalMonth;
+            season!.TotalGalPerYear = totalYear;
             await _context.SaveChangesAsync();
         }
 
