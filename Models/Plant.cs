@@ -21,7 +21,8 @@ namespace IrrigationManager.Models {
         public string Notes { get; set; } = string.Empty;
         public int Age { get; set; } = 0;
         public int HardinessZone { get; set; } = 1;
-        public int HarvestMonth { get; set; } = 1;
+        [StringLength(11)]
+        public string HarvestMonth { get; set; } = string.Empty;
         [StringLength(11)]
         public string Exposure { get; set; } = "Full Sun";
         public int ZoneId { get; set; }
