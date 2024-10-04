@@ -10,6 +10,10 @@ using IrrigationManager.Models;
 using System.Security.Policy;
 using IrrigationManager.Controllers;
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Data.SqlClient;
+
 namespace IrrigationManager.Controllers
 {
     public class PlantsController : BaseApiController
@@ -52,7 +56,6 @@ namespace IrrigationManager.Controllers
 
 
         // PUT: api/Plants/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlant(int id, Plant plant)
         {
@@ -87,7 +90,6 @@ namespace IrrigationManager.Controllers
         }
 
         // POST: api/Plants
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Plant>> PostPlant(Plant plant)
         {
@@ -104,6 +106,23 @@ namespace IrrigationManager.Controllers
             await RecalculateSeasonGallons(seasonId);
 
             return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
+        }
+
+        /* *-*-*-*-*-*-*-*-*-* COPY ALL PLANT TO NEW ZONE *-*-*-*-*-*-*-*-*- */
+        // GET: api/Plants/copyplantstonewzone/oldZoneId/newZoneId
+        [HttpGet("copyplantstonewzone/{oldZoneId}/{newZoneId}")]
+        public async Task<ActionResult<IEnumerable<Plant>>> CopyPlantsToNewZone(int oldZoneId, int newZoneId)
+        {
+            var plants = await _context.Plants.Where(z => z.ZoneId == oldZoneId).ToListAsync();
+            foreach (var plant in plants)
+            {
+                plant.Id = 0;
+                plant.ZoneId = newZoneId;
+                plant.TimeStamp = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+            }
+            _context.Plants.BulkInsert(plants);
+
+            return plants;
         }
 
         // DELETE: api/Plants/5
