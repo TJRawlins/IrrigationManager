@@ -108,21 +108,30 @@ namespace IrrigationManager.Controllers
             return CreatedAtAction("GetPlant", new { id = plant.Id }, plant);
         }
 
-        /* *-*-*-*-*-*-*-*-*-* COPY ALL PLANT TO NEW ZONE *-*-*-*-*-*-*-*-*- */
-        // GET: api/Plants/copyplantstonewzone/oldZoneId/newZoneId
-        [HttpGet("copyplantstonewzone/{oldZoneId}/{newZoneId}")]
-        public async Task<ActionResult<IEnumerable<Plant>>> CopyPlantsToNewZone(int oldZoneId, int newZoneId)
+        // POST: api/Plants/copyplantstonewzone/oldZoneId/newZoneId/seasonId
+        [HttpPost("copyplantstonewzone/{oldZoneId}/{newZoneId}/{seasonId}")]
+        public async Task<ActionResult> CopyPlantsToNewZone(int oldZoneId, int newZoneId, int seasonId)
         {
             var plants = await _context.Plants.Where(z => z.ZoneId == oldZoneId).ToListAsync();
-            foreach (var plant in plants)
+            if(plants.Any())
             {
-                plant.Id = 0;
-                plant.ZoneId = newZoneId;
-                plant.TimeStamp = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-            }
-            _context.Plants.BulkInsert(plants);
+                foreach (var plant in plants)
+                {
+                    plant.Id = 0;
+                    plant.ZoneId = newZoneId;
+                    plant.TimeStamp = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
+                }
 
-            return plants;
+                _context.Plants.BulkInsert(plants);
+                _context.ChangeTracker.Clear();
+
+                await RecalculateZoneGallons(newZoneId);
+                await RecalculateTotalPlants(newZoneId);
+                await RecalculateSeasonGallons(seasonId);
+
+            }
+
+            return NoContent();
         }
 
         // DELETE: api/Plants/5
