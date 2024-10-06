@@ -160,6 +160,26 @@ namespace IrrigationManager.Controllers
             return NoContent();
         }
 
+        [HttpDelete("deleteplantsfromzone/{zoneId}/{seasonId}")]
+        public async Task<IActionResult> DeletePlantsFromZone(int zoneId, int seasonId)
+        {
+            if (_context.Plants == null)
+            {
+                return NotFound();
+            }
+
+            var plants = await _context.Plants.Where(z => z.ZoneId == zoneId).ToListAsync();
+
+            if (plants.Any())
+            {
+                _context.BulkDelete(plants);
+                _context.ChangeTracker.Clear();
+
+                await RecalculateSeasonGallons(seasonId);
+            }
+            return NoContent();
+        }
+
         private bool PlantExists(int id)
         {
             return (_context.Plants?.Any(e => e.Id == id)).GetValueOrDefault();
