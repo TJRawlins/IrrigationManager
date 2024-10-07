@@ -54,10 +54,10 @@ namespace IrrigationManager.Controllers
 
         // PUT: api/Zones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutZone(int id, Models.Zone zone)
+        [HttpPut("{zoneId}/seasonId/{currentSeasonId}")]
+        public async Task<IActionResult> PutZone(int zoneId,int currentSeasonId , Models.Zone zone)
         {
-            if (id != zone.Id)
+            if (zoneId != zone.Id)
             {
                 return BadRequest();
             }
@@ -68,11 +68,12 @@ namespace IrrigationManager.Controllers
             {
                 await _context.SaveChangesAsync();
                 await RecalculateSeasonGallons(zone.SeasonId);
+                if (zone.SeasonId != currentSeasonId) await RecalculateSeasonGallons(currentSeasonId);
 
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ZoneExists(id))
+                if (!ZoneExists(zoneId))
                 {
                     return NotFound();
                 }
