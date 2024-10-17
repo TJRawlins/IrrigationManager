@@ -16,7 +16,7 @@ namespace IrrigationManager.Models {
         [Column(TypeName = "decimal(5,2)")]
         public decimal EmitterGPH { get; set; }
         public string TimeStamp { get; set; } = DateTime.Now.ToString("MM/dd/yyyy hh:mm tt");
-        [StringLength(200)]
+        [StringLength(500)]
         public string ImagePath { get; set; } = "https://t4.ftcdn.net/jpg/02/54/00/69/360_F_254006997_xRASPFxpBNlNiC4yFQxj8z8nrmFgVyNI.jpg";
         public string Notes { get; set; } = string.Empty;
         public int Age { get; set; } = 0;
