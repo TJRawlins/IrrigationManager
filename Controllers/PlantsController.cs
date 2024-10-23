@@ -192,21 +192,21 @@ namespace IrrigationManager.Controllers
                              on z.Id equals p.ZoneId
                              where z.Id == zoneId
                              select new {
-                                 ZoneTotal = p.GalsPerWk * p.Quantity
+                                 ZoneTotal = p.GalsPerWkCalc * p.Quantity
                              }).Sum(x => x.ZoneTotal);
             var totalMonth = (from z in _context.Zones
                               join p in _context.Plants
                               on z.Id equals p.ZoneId
                               where z.Id == zoneId
                               select new {
-                                  ZoneTotal = (p.GalsPerWk * p.Quantity) * 4
+                                  ZoneTotal = (p.GalsPerWkCalc * p.Quantity) * 4
                               }).Sum(x => x.ZoneTotal);
             var totalYear = (from z in _context.Zones
                              join p in _context.Plants
                              on z.Id equals p.ZoneId
                              where z.Id == zoneId
                              select new {
-                                 ZoneTotal = (p.GalsPerWk * p.Quantity) * 52
+                                 ZoneTotal = (p.GalsPerWkCalc * p.Quantity) * 52
                              }).Sum(x => x.ZoneTotal);
 
             var zone = await _context.Zones.FindAsync(zoneId);
