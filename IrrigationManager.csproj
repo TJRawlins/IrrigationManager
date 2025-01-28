@@ -6,8 +6,11 @@
     <UserSecretsId>f7c6e1c3-48b9-4aa4-95cf-ab9cde8172cf</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="Infisical.Sdk" Version="2.3.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
@@ -16,6 +19,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
-    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="9.103.6.3" />
+    <PackageReference Include="System.Text.Json" Version="9.0.1" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="9.103.7" />
   </ItemGroup>
 </Project>
