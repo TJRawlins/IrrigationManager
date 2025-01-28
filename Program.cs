@@ -8,6 +8,7 @@ using System.Text;
 using IrrigationManager.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+DotNetEnv.Env.Load();
 
 // Add services to the container.
 
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddIdentityServices(builder.Configuration);
 ApplicationServiceExtensions.AddApplicationServices(builder.Services, builder.Configuration);
 IdentityServiceExtensions.AddIdentityServices(builder.Services, builder.Configuration);
+LicenseServiceExtension.AddZEntityFrameworkExtenssionsLicense();
 
 builder.Services.AddControllers();
 
