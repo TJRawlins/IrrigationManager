@@ -21,6 +21,7 @@ IdentityServiceExtensions.AddIdentityServices(builder.Services, builder.Configur
 LicenseServiceExtension.AddZEntityFrameworkExtenssionsLicense();
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<ICalculationService, CalculationService>();
 
 var app = builder.Build();
 
