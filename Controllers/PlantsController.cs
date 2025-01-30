@@ -30,7 +30,7 @@ namespace IrrigationManager.Controllers
 
         // GET: api/Plants
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plant>>> GetPlant()
+        public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
         {
             if (_context.Plants == null)
             {
