@@ -1,6 +1,10 @@
 ﻿using IrrigationManager.Data;
 using IrrigationManager.Interfaces;
+using IrrigationManager.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace IrrigationManager.Services
 {
@@ -73,6 +77,47 @@ namespace IrrigationManager.Services
             var zone = await context.Zones.FindAsync(zoneId);
             zone!.TotalPlants = totalPlants;
             await context.SaveChangesAsync();
+        }
+
+        public async Task CalculateGallonsPerWeek(int zoneId, IMSContext context)
+        {
+            var zone = await context.Zones.Include(x => x.Plants).SingleOrDefaultAsync(x => x.Id == zoneId);
+            //var zone = zoneObj.Value;
+
+            var epsilon = 2.2204460492503131e-16;
+
+            if (zone != null)
+            {
+                var plantList = zone.Plants;
+                if (plantList != null)
+                {
+                    foreach (Plant p in plantList)
+                    {
+                        var totalMins = zone.RuntimeHours * 60 + zone.RuntimeMinutes;
+                        var totalGPH = p.EmitterGPH * p.EmittersPerPlant;
+                        var gallonsPerMinute = totalGPH / 60;
+                        var totalGallonsPerDay = gallonsPerMinute * totalMins;
+                        var totalGallonsPerWeek = (double)(totalGallonsPerDay * zone.RuntimePerWeek);
+                        p.GalsPerWkCalc = (decimal)Math.Round((totalGallonsPerWeek + epsilon) * 100) / 100;
+                    }
+                }
+            }
+     
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<ActionResult<Zone>> GetZone(int zoneId, IMSContext context)
+        {
+            var zone = await context.Zones.Include(x => x.Plants).SingleOrDefaultAsync(x => x.Id == zoneId);
+
+            if (zone != null)
+            {
+                return zone;
+            }
+            else
+            {
+                return new NotFoundResult();
+            }
         }
     }
 }
