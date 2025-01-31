@@ -7,5 +7,6 @@ namespace IrrigationManager.Interfaces
         Task RecalculateSeasonGallons(int seasonId, IMSContext context);
         Task RecalculateZoneGallons(int zoneId, IMSContext context);
         Task RecalculateTotalPlants(int zoneId, IMSContext context);
+        Task CalculateGallonsPerWeek(int zoneId, IMSContext context);
     }
 }
