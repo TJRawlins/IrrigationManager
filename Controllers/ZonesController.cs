@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using IrrigationManager.Data;
 using IrrigationManager.Models;
 using System.Security.Policy;
+using IrrigationManager.Interfaces;
 
 namespace IrrigationManager.Controllers
 {
     public class ZonesController : BaseApiController
     {
         private readonly IMSContext _context;
+        private readonly ICalculationService _calculationService;
 
-        public ZonesController(IMSContext context)
+        public ZonesController(IMSContext context, ICalculationService calculationServices)
         {
             _context = context;
+            _calculationService = calculationServices;
         }
 
         // GET: api/Zones
@@ -67,8 +70,10 @@ namespace IrrigationManager.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                await RecalculateSeasonGallons(zone.SeasonId);
-                if (zone.SeasonId != currentSeasonId) await RecalculateSeasonGallons(currentSeasonId);
+                await _calculationService.CalculateGallonsPerWeek(zoneId, _context);
+                await _calculationService.RecalculateSeasonGallons(zone.SeasonId, _context);
+                await _calculationService.RecalculateZoneGallons(zoneId, _context);
+                if (zone.SeasonId != currentSeasonId) await _calculationService.RecalculateSeasonGallons(currentSeasonId, _context);
 
             }
             catch (DbUpdateConcurrencyException)
@@ -97,7 +102,7 @@ namespace IrrigationManager.Controllers
             }
             _context.Zones.Add(zone);
             await _context.SaveChangesAsync();
-            await RecalculateSeasonGallons(zone.SeasonId);
+            await _calculationService.RecalculateSeasonGallons(zone.SeasonId, _context);
 
             return CreatedAtAction("GetZone", new { id = zone.Id }, zone);
         }
@@ -118,7 +123,7 @@ namespace IrrigationManager.Controllers
             var seasonId = zone.SeasonId;
             _context.Zones.Remove(zone);
             await _context.SaveChangesAsync();
-            await RecalculateSeasonGallons(seasonId);
+            await _calculationService.RecalculateSeasonGallons(seasonId, _context);
 
             return NoContent();
         }
@@ -127,27 +132,6 @@ namespace IrrigationManager.Controllers
         {
             return (_context.Zones?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-        /* *-*-*-*-*-*-*-*-*-* RECALCULATE TOTAL SEASON GALLONS *-*-*-*-*-*-*-*-*- */
-        public async Task RecalculateSeasonGallons(int seasonId)
-        {
-            var totalWeek = _context.Zones
-                .Where(zone => zone.SeasonId == seasonId)
-                .Sum(zone => zone.TotalGalPerWeek);
-            var totalMonth = _context.Zones
-                .Where(zone => zone.SeasonId == seasonId)
-                .Sum(zone => zone.TotalGalPerMonth);
-            var totalYear = _context.Zones
-                .Where(zone => zone.SeasonId == seasonId)
-                .Sum(zone => zone.TotalGalPerYear);
-
-            var season = await _context.Season.FindAsync(seasonId);
-            season!.TotalGalPerWeek = totalWeek;
-            season!.TotalGalPerMonth = totalMonth;
-            season!.TotalGalPerYear = totalYear;
-            await _context.SaveChangesAsync();
-        }
-
     }
 
 }
