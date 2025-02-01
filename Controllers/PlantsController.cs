@@ -139,7 +139,7 @@ namespace IrrigationManager.Controllers
 
         // DELETE: api/Plants/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlant(int id, CalculationService calculationService)
+        public async Task<IActionResult> DeletePlant(int id)
         {
             if (_context.Plants == null)
             {
