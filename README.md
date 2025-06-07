@@ -418,7 +418,7 @@ dotnet ef database update
 - Consider caching for frequently accessed data
 - Optimize database queries with proper indexing
 
-## 🔮 Upcoming Features
+## 💡 Upcoming Features
 
 - Enhanced water usage analytics
 - Advanced plant recommendation engine
