@@ -74,7 +74,7 @@ dotnet watch run
 •	Press F5 to build and run the project.
 •	Use the integrated Test Explorer to run unit tests.
 
-The API will be available at `https://localhost:5555` (or configured port).
+The API will be available at `https://localhost:5555` (or configured port in launchSettings.json).
 
 ## 📁 Project Structure
 
