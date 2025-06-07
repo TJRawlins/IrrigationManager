@@ -448,7 +448,7 @@ dotnet ef database update
 
 ---
 
-For frontend implementation, see the [Frontend Repository](link-to-frontend-repo).
+For frontend implementation, see the [Frontend Repository](https://github.com/TJRawlins/IrrigationManagerReact).
 
 ## 📞 Support
 
