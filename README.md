@@ -2,6 +2,8 @@
 
 A robust .NET API backend for the Droplet irrigation and plant management system. Built with ASP.NET Core, it provides comprehensive water usage tracking, zone management, and plant data services. It also provides endpoints for managing schedules, zones, and estimated water cost calculations, making it easy to track irrigation systems, plants, and water usage.
 
+
+
 ## 🚀 Features
 
 - **Water Usage Analytics**: Calculate and track water consumption per season, zone, and individual plants
