@@ -68,7 +68,7 @@ dotnet watch run
 ```
 
 ### Running in Visual Studio
-•	Open droplet.sln in Visual Studio.
+•	Open IrrigationManager.sln in Visual Studio.
 •	Press F5 to build and run the project.
 •	Use the integrated Test Explorer to run unit tests.
 
