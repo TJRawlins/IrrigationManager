@@ -1,4 +1,4 @@
-# Droplet Backend - Irrigation & Plant Management API
+# <img src="https://github.com/user-attachments/assets/041ab30c-ca40-4f1e-93ac-f6bc961a3d3c" width="45px"> Droplet Backend - Irrigation & Plant Management API
 
 A robust .NET API backend for the Droplet irrigation and plant management system. Built with ASP.NET Core, it provides comprehensive water usage tracking, zone management, and plant data services. It also provides endpoints for managing schedules, zones, and estimated water cost calculations, making it easy to track irrigation systems, plants, and water usage.
 
